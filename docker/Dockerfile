@@ -55,13 +55,13 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # 先安装依赖（利用 Docker 层缓存）
 COPY pyproject.toml uv.lock ./
-RUN --mount=type=cache,id=uv-cache,target=/root/.cache/uv \
+RUN --mount=type=cache,id=s/uv-cache,target=/root/.cache/uv \
     uv sync --locked --no-install-project --no-dev
 
 # 再复制项目代码并安装项目本身
 COPY docker/manage.py .
 COPY trendradar/ ./trendradar/
-RUN --mount=type=cache,id=uv-cache,target=/root/.cache/uv \
+RUN --mount=type=cache,id=s/uv-cache,target=/root/.cache/uv \
     uv sync --locked --no-dev
 
 ENV PATH="/app/.venv/bin:$PATH"
